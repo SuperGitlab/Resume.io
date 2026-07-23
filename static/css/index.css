@@ -14,6 +14,74 @@
     --border-accent: rgba(88, 166, 255, 0.25);
     --glow: rgba(88, 166, 255, 0.12);
     --radius: 8px;
+    /* ===== 主题相关：发光球与粒子（深色默认） ===== */
+    --orb-1: rgba(88, 166, 255, 0.15);
+    --orb-2: rgba(163, 113, 247, 0.12);
+    --particle-1: 88, 166, 255;
+    --particle-2: 163, 113, 247;
+}
+
+/* ===== Theme: 浅色 ===== */
+[data-theme="light"] {
+    --bg-primary: #f6f8fa;
+    --bg-secondary: #ffffff;
+    --bg-card: rgba(255, 255, 255, 0.95);
+    --text-primary: #1f2328;
+    --text-secondary: #57606a;
+    --text-muted: #8c959f;
+    --accent: #0969da;
+    --accent-secondary: #8250df;
+    --accent-green: #1a7f37;
+    --accent-gradient: linear-gradient(135deg, #0969da 0%, #8250df 100%);
+    --border: rgba(208, 215, 222, 0.8);
+    --border-accent: rgba(9, 105, 218, 0.25);
+    --glow: rgba(9, 105, 218, 0.12);
+    --orb-1: rgba(9, 105, 218, 0.10);
+    --orb-2: rgba(130, 80, 223, 0.08);
+    --particle-1: 9, 105, 218;
+    --particle-2: 130, 80, 223;
+}
+
+/* ===== Theme: 暖色护眼 ===== */
+[data-theme="warm"] {
+    --bg-primary: #f5f0e6;
+    --bg-secondary: #faf6ed;
+    --bg-card: rgba(250, 246, 237, 0.95);
+    --text-primary: #3d3a34;
+    --text-secondary: #5c574f;
+    --text-muted: #8a8278;
+    --accent: #b86d29;
+    --accent-secondary: #8b5a2b;
+    --accent-green: #4a7c59;
+    --accent-gradient: linear-gradient(135deg, #b86d29 0%, #8b5a2b 100%);
+    --border: rgba(200, 188, 170, 0.8);
+    --border-accent: rgba(184, 109, 41, 0.25);
+    --glow: rgba(184, 109, 41, 0.12);
+    --orb-1: rgba(184, 109, 41, 0.12);
+    --orb-2: rgba(74, 124, 89, 0.10);
+    --particle-1: 184, 109, 41;
+    --particle-2: 74, 124, 89;
+}
+
+/* ===== Theme: 科技蓝紫 ===== */
+[data-theme="cyan-purple"] {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-card: rgba(30, 41, 59, 0.95);
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #38bdf8;
+    --accent-secondary: #c084fc;
+    --accent-green: #4ade80;
+    --accent-gradient: linear-gradient(135deg, #38bdf8 0%, #c084fc 100%);
+    --border: rgba(51, 65, 85, 0.8);
+    --border-accent: rgba(56, 189, 248, 0.25);
+    --glow: rgba(56, 189, 248, 0.12);
+    --orb-1: rgba(56, 189, 248, 0.15);
+    --orb-2: rgba(192, 132, 252, 0.12);
+    --particle-1: 56, 189, 248;
+    --particle-2: 192, 132, 252;
 }
 
 /* ===== Reset ===== */
@@ -25,6 +93,7 @@ body {
     color: var(--text-primary);
     line-height: 1.65;
     overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ===== Particles ===== */
@@ -40,8 +109,8 @@ body {
     animation: float 25s ease-in-out infinite;
     pointer-events: none;
 }
-.orb-1 { width: 500px; height: 500px; background: rgba(88, 166, 255, 0.15); top: -150px; right: -150px; }
-.orb-2 { width: 400px; height: 400px; background: rgba(163, 113, 247, 0.12); bottom: 10%; left: -100px; animation-delay: -10s; }
+.orb-1 { width: 500px; height: 500px; background: var(--orb-1); top: -150px; right: -150px; transition: background 0.3s ease; }
+.orb-2 { width: 400px; height: 400px; background: var(--orb-2); bottom: 10%; left: -100px; animation-delay: -10s; transition: background 0.3s ease; }
 @keyframes float {
     0%, 100% { transform: translate(0, 0) scale(1); }
     33% { transform: translate(30px, -20px) scale(1.05); }
