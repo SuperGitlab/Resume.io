@@ -24,8 +24,23 @@
             <!-- 导航栏 -->
             <nav class="navbar">
                 <div class="nav-brand">&lt;/&gt; {{ site.name }}</div>
-                <div class="nav-links">
-                    <a v-for="link in navLinks" :key="link.id" :href="'#' + link.id">{{ link.title }}</a>
+                <div class="nav-right">
+                    <div class="nav-links">
+                        <a v-for="link in navLinks" :key="link.id" :href="'#' + link.id">{{ link.title }}</a>
+                    </div>
+                    <div class="theme-switcher" v-click-outside="closeThemePanel">
+                        <button class="theme-btn" @click="toggleThemePanel" title="切换主题">
+                            <i :class="currentThemeObj.icon"></i>
+                        </button>
+                        <div class="theme-panel" :class="{ open: themePanelOpen }">
+                            <div v-for="t in themeList" :key="t.key"
+                                class="theme-option" :class="{ active: t.key === currentTheme }"
+                                @click="setTheme(t.key)">
+                                <span class="theme-swatch" :style="{ background: t.swatch }"></span>
+                                <span>{{ t.name }}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </nav>
 
