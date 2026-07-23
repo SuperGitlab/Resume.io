@@ -228,6 +228,15 @@
     <script>
         const { createApp, ref, reactive, onMounted, computed } = Vue;
 
+        // 点击元素外部时触发（用于关闭主题面板）
+        const clickOutside = {
+            beforeMount(el, binding) {
+                el._clickOutside = (e) => { if (!(el === e.target || el.contains(e.target))) binding.value(); };
+                setTimeout(() => document.addEventListener('click', el._clickOutside), 0);
+            },
+            unmounted(el) { document.removeEventListener('click', el._clickOutside); }
+        };
+
         createApp({
             setup() {
                 // ===== 站点配置 =====
@@ -235,6 +244,32 @@
                     name: '邓文瀚',
                     slogan: '探索未知，代码为舟'
                 });
+
+                // ===== 主题切换 =====
+                const themeList = [
+                    { key: 'dark', name: '深色', icon: 'ri-moon-fill', swatch: 'linear-gradient(135deg, #0d1117, #58a6ff)' },
+                    { key: 'light', name: '浅色', icon: 'ri-sun-fill', swatch: 'linear-gradient(135deg, #f6f8fa, #0969da)' },
+                    { key: 'warm', name: '暖色护眼', icon: 'ri-leaf-fill', swatch: 'linear-gradient(135deg, #f5f0e6, #b86d29)' },
+                    { key: 'cyan-purple', name: '科技蓝紫', icon: 'ri-magic-fill', swatch: 'linear-gradient(135deg, #0f172a, #c084fc)' }
+                ];
+                const themePanelOpen = ref(false);
+                const currentTheme = ref(localStorage.getItem('resume-theme') || 'dark');
+                const currentThemeObj = computed(() =>
+                    themeList.find(t => t.key === currentTheme.value) || themeList[0]);
+
+                const applyTheme = (key) => {
+                    if (key === 'dark') document.documentElement.removeAttribute('data-theme');
+                    else document.documentElement.setAttribute('data-theme', key);
+                    localStorage.setItem('resume-theme', key);
+                    // 通知粒子背景更新颜色（若已初始化）
+                    if (window.__readParticleColors) window.__readParticleColors();
+                };
+                const setTheme = (key) => { currentTheme.value = key; applyTheme(key); themePanelOpen.value = false; };
+                const toggleThemePanel = () => { themePanelOpen.value = !themePanelOpen.value; };
+                const closeThemePanel = () => { themePanelOpen.value = false; };
+
+                // 初始应用已保存的主题
+                applyTheme(currentTheme.value);
 
                 // ===== 导航链接 =====
                 const navLinks = ref([
@@ -424,6 +459,16 @@
                     let particles = [];
                     let mouse = { x: null, y: null };
 
+                    // 从 CSS 变量读取粒子颜色，并暴露给主题切换时调用
+                    const particleColors = { c1: '88, 166, 255', c2: '163, 113, 247' };
+                    const readParticleColors = () => {
+                        const cs = getComputedStyle(document.documentElement);
+                        particleColors.c1 = cs.getPropertyValue('--particle-1').trim() || '88, 166, 255';
+                        particleColors.c2 = cs.getPropertyValue('--particle-2').trim() || '163, 113, 247';
+                    };
+                    readParticleColors();
+                    window.__readParticleColors = readParticleColors;
+
                     const resize = () => {
                         canvas.width = window.innerWidth;
                         canvas.height = window.innerHeight;
@@ -439,8 +484,9 @@
                             this.vx = (Math.random() - 0.5) * 0.6;
                             this.vy = (Math.random() - 0.5) * 0.6;
                             this.r = Math.random() * 2 + 1;
-                            this.color = Math.random() > 0.5 ? '88, 166, 255' : '163, 113, 247';
+                            this.useFirst = Math.random() > 0.5;
                         }
+                        get color() { return this.useFirst ? particleColors.c1 : particleColors.c2; }
                         update() {
                             this.x += this.vx;
                             this.y += this.vy;
@@ -554,10 +600,12 @@
                 return {
                     site, navLinks, profile, socialLinks, about, skills, projects,
                     experience, stats, resourceLinks, typedText, hitokoto, poetry,
-                    currentYear, visibleSections
+                    currentYear, visibleSections,
+                    themeList, themePanelOpen, currentTheme, currentThemeObj,
+                    setTheme, toggleThemePanel, closeThemePanel
                 };
             }
-        }).mount('#app');
+        }).directive('click-outside', clickOutside).mount('#app');
     </script>
 </body>
 
