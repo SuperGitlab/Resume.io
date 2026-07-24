@@ -31,7 +31,6 @@ NOTES = {
 MARKDOWN_EXTENSIONS = [
     "pymdownx.superfences",
     "pymdownx.highlight",
-    "pymdownx.arithmatex",
     "pymdownx.tilde",
     "pymdownx.tasklist",
     "pymdownx.magiclink",
@@ -49,9 +48,6 @@ EXTENSION_CONFIGS = {
     "pymdownx.highlight": {
         "css_class": "codehilite",
         "guess_lang": False,
-    },
-    "pymdownx.arithmatex": {
-        "generic": True,
     },
 }
 
