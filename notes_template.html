@@ -8,6 +8,7 @@
     <meta name="theme-color" content="#0d1117">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
     <link rel="stylesheet" href="/static/css/pygments.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <style>
         :root {
             --bg-primary: #0d1117;
@@ -212,6 +213,7 @@
             border-bottom: 1px solid var(--border);
             margin-top: 0;
         }
+        .markdown-body h1:not(:first-child) { margin-top: 1.6em; }
         .markdown-body h2 {
             font-size: 1.55em;
             padding-left: 0.6em;
@@ -382,7 +384,8 @@
         }
         .toc-list a:hover { background: var(--glow); color: var(--text-primary); }
         .toc-list a.active { color: var(--accent); background: var(--glow); border-left-color: var(--accent); font-weight: 500; }
-        .toc-list .toc-h3 { padding-left: 1.2rem; font-size: 0.82rem; }
+        .toc-list .toc-h2 { padding-left: 0.8rem; font-size: 0.84rem; }
+.toc-list .toc-h3 { padding-left: 1.4rem; font-size: 0.8rem; }
 
         /* ===== Mobile TOC ===== */
         .toc-fab, .back-to-top {
@@ -484,6 +487,7 @@
     <!-- Back to top -->
     <button class="back-to-top" id="backToTop" title="返回顶部" aria-label="返回顶部"><i class="ri-arrow-up-line"></i></button>
 
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script>
         // ===== Theme system =====
         const themeList = [
@@ -536,7 +540,7 @@
         // ===== TOC generation =====
         function buildTOC() {
             const article = document.getElementById('markdownBody');
-            const headings = Array.from(article.querySelectorAll('h2, h3'));
+            const headings = Array.from(article.querySelectorAll('h1, h2, h3'));
             if (!headings.length) return [];
 
             headings.forEach((h, i) => {
@@ -554,7 +558,7 @@
             const list = document.getElementById(containerId);
             if (!items.length) { list.innerHTML = '<li><a>无目录</a></li>'; return; }
             list.innerHTML = items.map(item => `
-                <li class="${item.level === 3 ? 'toc-h3' : ''}">
+                <li class="${item.level === 2 ? 'toc-h2' : item.level === 3 ? 'toc-h3' : ''}">
                     <a href="#${item.id}" data-id="${item.id}">${escapeHtml(item.text)}</a>
                 </li>
             `).join('');
@@ -666,7 +670,22 @@
 
             initCodeCopy();
             initBackToTop();
+            renderMath();
         });
+
+        // ===== KaTeX math rendering =====
+        function renderMath() {
+            if (typeof katex === 'undefined') return;
+            document.querySelectorAll('.arithmatex').forEach(el => {
+                const tex = el.textContent.trim();
+                const isDisplay = el.tagName === 'DIV';
+                try {
+                    katex.render(tex, el, { throwOnError: false, displayMode: isDisplay });
+                } catch (err) {
+                    console.error('KaTeX render failed:', err);
+                }
+            });
+        }
     </script>
 </body>
 
