@@ -448,15 +448,45 @@
 
 <body>
     <nav class="topbar">
-        <a href="/" class="back-link"><i class="ri-arrow-left-line"></i> 返回主页</a>
-        <span class="doc-title">{{ title }}</span>
+        <div class="topbar-left">
+            <a href="/" class="back-link"><i class="ri-arrow-left-line"></i> 返回主页</a>
+            <span class="doc-title">{{ title }}</span>
+        </div>
+        <div class="theme-switcher" id="themeSwitcher">
+            <button class="theme-btn" id="themeBtn" title="切换主题"><i class="ri-moon-fill"></i></button>
+            <div class="theme-panel" id="themePanel">
+                <!-- theme options injected by JS -->
+            </div>
+        </div>
     </nav>
 
-    <main class="container">
-        <article class="markdown-body">
-            {{ content }}
-        </article>
-    </main>
+    <div class="layout-wrapper">
+        <main class="main-content">
+            <article class="markdown-body" id="markdownBody">
+                {{ content }}
+            </article>
+        </main>
+
+        <aside class="toc-sidebar" id="tocSidebar" aria-label="目录">
+            <div class="toc-title">目录</div>
+            <ul class="toc-list" id="tocList"></ul>
+        </aside>
+    </div>
+
+    <!-- Mobile TOC -->
+    <button class="toc-fab" id="tocFab" title="目录" aria-label="打开目录"><i class="ri-list-check"></i></button>
+    <div class="toc-drawer-overlay" id="tocOverlay"></div>
+    <aside class="toc-drawer" id="tocDrawer" aria-label="目录">
+        <div class="toc-title">目录</div>
+        <ul class="toc-list" id="tocDrawerList"></ul>
+    </aside>
+
+    <!-- Back to top -->
+    <button class="back-to-top" id="backToTop" title="返回顶部" aria-label="返回顶部"><i class="ri-arrow-up-line"></i></button>
+
+    <script>
+        // JS will be added in Task 3
+    </script>
 </body>
 
 </html>
